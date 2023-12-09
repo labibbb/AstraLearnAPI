@@ -8,6 +8,5 @@
         public string video_pembelajaran { get; set; }
         public string modul_pembelajaran { get; set; }
         public string deskripsi { get; set; }
-        public byte[] isi_modul { get; set; }
     }
 }

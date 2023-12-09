@@ -37,7 +37,6 @@ namespace AstraLearnAPI.Model
                                 video_pembelajaran = reader["video_pembelajaran"].ToString(),
                                 modul_pembelajaran = reader["modul_pembelajaran"].ToString(),
                                 deskripsi = reader["deskripsi"].ToString(),
-                                isi_modul = (byte[])reader["isi_modul"],
                             };
                             dataList.Add(data);
                         }
@@ -75,7 +74,6 @@ namespace AstraLearnAPI.Model
                             data.video_pembelajaran = reader["video_pembelajaran"].ToString();
                             data.modul_pembelajaran = reader["modul_pembelajaran"].ToString();
                             data.deskripsi = reader["deskripsi"].ToString();
-                            data.isi_modul = (byte[])reader["isi_modul"];
                         }
                     }
                 }
@@ -113,7 +111,6 @@ namespace AstraLearnAPI.Model
                                 video_pembelajaran = reader["video_pembelajaran"].ToString(),
                                 modul_pembelajaran = reader["modul_pembelajaran"].ToString(),
                                 deskripsi = reader["deskripsi"].ToString(),
-                                isi_modul = (byte[])reader["isi_modul"],
                             };
                             dataList.Add(data);
                         }
@@ -135,8 +132,8 @@ namespace AstraLearnAPI.Model
         {
             try
             {
-                string query = "INSERT INTO tb_section (id_pelatihan, nama_section, video_pembelajaran, modul_pembelajaran, deskripsi, isi_modul) " +
-                               "VALUES (@p1, @p2, @p3, @p4, @p5, @p6)";
+                string query = "INSERT INTO tb_section (id_pelatihan, nama_section, video_pembelajaran, modul_pembelajaran, deskripsi) " +
+                               "VALUES (@p1, @p2, @p3, @p4, @p5)";
                 using (SqlCommand command = new SqlCommand(query, _connection))
                 {
                     command.Parameters.AddWithValue("@p1", data.id_pelatihan);
@@ -144,7 +141,6 @@ namespace AstraLearnAPI.Model
                     command.Parameters.AddWithValue("@p3", data.video_pembelajaran);
                     command.Parameters.AddWithValue("@p4", data.modul_pembelajaran);
                     command.Parameters.AddWithValue("@p5", data.deskripsi);
-                    command.Parameters.AddWithValue("@p6", data.isi_modul);
                     _connection.Open();
                     command.ExecuteNonQuery();
                 }
@@ -187,7 +183,7 @@ namespace AstraLearnAPI.Model
             {
                 string query = "UPDATE tb_section " +
                                "SET id_pelatihan = @p2, nama_section = @p3, video_pembelajaran = @p4, " +
-                               "modul_pembelajaran = @p5, deskripsi = @p6, isi_modul = @p7 " +
+                               "modul_pembelajaran = @p5, deskripsi = @p6" +
                                "WHERE id_section = @p1";
 
                 using (SqlCommand command = new SqlCommand(query, _connection))
@@ -198,7 +194,6 @@ namespace AstraLearnAPI.Model
                     command.Parameters.AddWithValue("@p4", data.video_pembelajaran);
                     command.Parameters.AddWithValue("@p5", data.modul_pembelajaran);
                     command.Parameters.AddWithValue("@p6", data.deskripsi);
-                    command.Parameters.AddWithValue("@p7", data.isi_modul);
                     _connection.Open();
                     command.ExecuteNonQuery();
                 }

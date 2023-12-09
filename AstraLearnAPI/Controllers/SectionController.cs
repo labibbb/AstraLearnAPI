@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.IO;
 
 namespace AstraLearnAPI.Controllers
 {
@@ -18,19 +19,19 @@ namespace AstraLearnAPI.Controllers
         [HttpGet("[controller]/GetAllSections")]
         public ActionResult<ResponseModel> GetAllSections()
         {
-                ResponseModel responseModel = new ResponseModel();
-                try
-                {
-                    responseModel.message = "Berhasil";
-                    responseModel.status = 200;
-                    responseModel.data = _sectionRepository.GetAllData();
-                }
-                catch (Exception ex)
-                {
-                    responseModel.message = ex.Message;
-                    responseModel.status = 500;
-                }
-                return Ok(responseModel);
+            ResponseModel responseModel = new ResponseModel();
+            try
+            {
+                responseModel.message = "Berhasil";
+                responseModel.status = 200;
+                responseModel.data = _sectionRepository.GetAllData();
+            }
+            catch (Exception ex)
+            {
+                responseModel.message = ex.Message;
+                responseModel.status = 500;
+            }
+            return Ok(responseModel);
         }
 
         [HttpGet("[controller]/GetAllSectionsById")]
@@ -121,6 +122,36 @@ namespace AstraLearnAPI.Controllers
                 responseModel.status = 500;
             }
             return Ok(responseModel);
+        }
+
+        [HttpPost("[controller]/UploadFile")]
+        public ActionResult UploadFile()
+        {
+            try
+            {
+                var file = Request.Form.Files[0];
+
+                if (file != null && file.Length > 0)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+                    var filePath = Path.Combine("C:\\Upload", fileName); // Sesuaikan dengan direktori yang diinginkan
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+                    return new JsonResult(new { success = true, message = "File uploaded successfully." });
+                }
+                else
+                {
+                    return new JsonResult(new { success = false, message = "No file received." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { success = false, message = $"Error: {ex.Message}" });
+            }
         }
     }
 }
