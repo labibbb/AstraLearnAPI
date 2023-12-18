@@ -134,7 +134,7 @@ namespace AstraLearnAPI.Controllers
                 if (file != null && file.Length > 0)
                 {
                     var fileName = Path.GetFileName(file.FileName);
-                    var filePath = Path.Combine("C:\\Upload", fileName); // Sesuaikan dengan direktori yang diinginkan
+                    var filePath = Path.Combine("C:\\Users\\syahl\\source\\repos\\AstraLearn\\AstraLearn\\Upload", fileName); // Sesuaikan dengan direktori yang diinginkan
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {

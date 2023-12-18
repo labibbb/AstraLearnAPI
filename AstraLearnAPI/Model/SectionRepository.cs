@@ -181,10 +181,7 @@ namespace AstraLearnAPI.Model
         {
             try
             {
-                string query = "UPDATE tb_section " +
-                               "SET id_pelatihan = @p2, nama_section = @p3, video_pembelajaran = @p4, " +
-                               "modul_pembelajaran = @p5, deskripsi = @p6" +
-                               "WHERE id_section = @p1";
+                string query = "UPDATE tb_section SET id_pelatihan = @p2, nama_section = @p3, video_pembelajaran = @p4, modul_pembelajaran = @p5, deskripsi = @p6 WHERE id_section = @p1";
 
                 using (SqlCommand command = new SqlCommand(query, _connection))
                 {
