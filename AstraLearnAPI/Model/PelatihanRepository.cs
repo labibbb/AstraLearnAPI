@@ -53,6 +53,43 @@ namespace AstraLearnAPI.Model
             return dataList;
         }
 
+        public List<PelatihanModel> GetAllData2(int id)
+        {
+            List<PelatihanModel> dataList = new List<PelatihanModel>();
+            try
+            {
+                string query = "select* from PelatihanView WHERE id_pengguna = @p1";
+                SqlCommand command = new SqlCommand(query, _connection);
+                command.Parameters.AddWithValue("@p1", id);
+                _connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    PelatihanModel data = new PelatihanModel
+                    {
+                        id_pelatihan = Convert.ToInt32(reader["id_pelatihan"]),
+                        id_pengguna = Convert.ToInt32(reader["id_pengguna"]),
+                        id_klasifikasi = Convert.ToInt32(reader["id_klasifikasi"]),
+                        nama_pelatihan = reader["nama_pelatihan"].ToString(),
+                        deskripsi_pelatihan = reader["deskripsi_pelatihan"].ToString(),
+                        jumlah_peserta = Convert.ToInt32(reader["jumlah_peserta"]),
+                        nama_klasifikasi = reader["nama_klasifikasi"].ToString(),
+                        nilai = Convert.ToInt32(reader["nilai"])
+                    };
+                    dataList.Add(data);
+                }
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                _connection.Close();
+            }
+            return dataList;
+        }
 
         public PelatihanModel GetData(int id)
         {
@@ -87,7 +124,6 @@ namespace AstraLearnAPI.Model
             }
             return data;
         }
-
 
         public void InsertData(PelatihanModel data)
         {
@@ -130,6 +166,30 @@ namespace AstraLearnAPI.Model
                 command.Parameters.AddWithValue("@p4", data.nama_pelatihan);
                 command.Parameters.AddWithValue("@p5", data.deskripsi_pelatihan);
                 command.Parameters.AddWithValue("@p6", data.jumlah_peserta);
+                _connection.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
+        public void UpdateNilai(int id, int nilai)
+        {
+            try
+            {
+                string query = "UPDATE tb_pelatihan " +
+                               "SET nilai = @p2 " +
+                               "WHERE id_pelatihan = @p1";
+
+                using SqlCommand command = new SqlCommand(query, _connection);
+                command.Parameters.AddWithValue("@p1", id);
+                command.Parameters.AddWithValue("@p2", nilai);
                 _connection.Open();
                 command.ExecuteNonQuery();
             }

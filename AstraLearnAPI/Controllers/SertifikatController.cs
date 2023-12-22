@@ -32,6 +32,24 @@ namespace AstraLearnAPI.Controllers
             return Ok(responseModel);
         }
 
+        [HttpGet("[controller]/GetAllSertifikat2")]
+        public ActionResult<ResponseModel> GetAllSertifikat2(int id)
+        {
+            ResponseModel responseModel = new ResponseModel();
+            try
+            {
+                responseModel.message = "Berhasil";
+                responseModel.status = 200;
+                responseModel.data = _sertifikatRepository.GetAllData2(id);
+            }
+            catch (Exception ex)
+            {
+                responseModel.message = ex.Message;
+                responseModel.status = 500;
+            }
+            return Ok(responseModel);
+        }
+
         [HttpGet("[controller]/GetSertifikat")]
         public ActionResult<ResponseModel> GetSertifikat(int id)
         {

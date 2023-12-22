@@ -50,6 +50,24 @@ namespace AstraLearnAPI.Controllers
             return responseModel;
         }
 
+        [HttpGet("[controller]/GetPelatihan2")]
+        public ResponseModel GetPelatihan2(int id)
+        {
+            ResponseModel responseModel = new ResponseModel();
+            try
+            {
+                responseModel.message = "Berhasil";
+                responseModel.status = 200;
+                responseModel.data = _pelatihanRepository.GetAllData2(id);
+            }
+            catch (Exception ex)
+            {
+                responseModel.message = ex.Message;
+                responseModel.status = 500;
+            }
+            return responseModel;
+        }
+
         [HttpPost("[controller]/InsertPelatihan")]
         public ResponseModel InsertPelatihan([FromBody] PelatihanModel pelatihanModel)
         {
@@ -75,6 +93,24 @@ namespace AstraLearnAPI.Controllers
             try
             {
                 _pelatihanRepository.UpdateData(pelatihanModel);
+                responseModel.message = "Data berhasil diupdate";
+                responseModel.status = 200;
+            }
+            catch (Exception ex)
+            {
+                responseModel.message = ex.Message;
+                responseModel.status = 500;
+            }
+            return responseModel;
+        }
+
+        [HttpPost("[controller]/UpdateNilai")]
+        public ResponseModel UpdateNilai(int id, int nilai)
+        {
+            ResponseModel responseModel = new ResponseModel();
+            try
+            {
+                _pelatihanRepository.UpdateNilai(id, nilai);
                 responseModel.message = "Data berhasil diupdate";
                 responseModel.status = 200;
             }
