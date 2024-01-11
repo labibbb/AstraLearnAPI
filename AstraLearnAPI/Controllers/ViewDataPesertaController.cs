@@ -13,8 +13,8 @@ namespace AstraLearnAPI.Controllers
             _viewDataPesertaRepository = new ViewDataPesertaRepository(configuration);
         }
 
-        [HttpGet("[controller]/GetAllPelatihs")]
-        public ActionResult<ResponseModel> GetAllPelatihs(int id_pengguna)
+        [HttpGet("[controller]/GetAllDataPesertas")]
+        public ActionResult<ResponseModel> GetAllDataPesertas(int id_pengguna)
         {
             ResponseModel responseModel = new ResponseModel();
             try

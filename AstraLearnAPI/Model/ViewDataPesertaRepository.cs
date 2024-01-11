@@ -21,20 +21,16 @@ namespace AstraLearnAPI.Model
             List<ViewDataPesertaModel> dataList = new List<ViewDataPesertaModel>();
             try
             {
-                string query = @"SELECT 
-                                    p.id_pengguna,
-                                    COUNT(*) AS jumlah_pelatihan,
-                                    SUM(jumlah_peserta) AS jumlah_peserta,
-                                    SUM(CASE WHEN riwayat_section < jumlah_section THEN 1 ELSE 0 END) AS pelatihan_berjalan,
-                                    SUM(CASE WHEN riwayat_section = jumlah_section THEN 1 ELSE 0 END) AS pelatihan_selesai
-                                FROM 
-                                    [AstraLearn].[dbo].[tb_pelatihan] p
+                string query = @"SELECT
+                                    COUNT(mp.id_pelatihan) AS jumlah_pelatihan,
+                                    COUNT(CASE WHEN p.jumlah_section > mp.riwayat_section THEN 1 END) AS pelatihan_berjalan,
+                                    COUNT(CASE WHEN p.jumlah_section = mp.riwayat_section THEN 1 END) AS pelatihan_selesai
+                                FROM
+                                    tb_mengikuti_pelatihan mp
                                 JOIN
-                                    [AstraLearn].[dbo].[tb_mengikuti_pelatihan] mengikuti ON p.id_pelatihan = mengikuti.id_pelatihan
+                                    tb_pelatihan p ON mp.id_pelatihan = p.id_pelatihan
                                 WHERE
-                                    p.id_pengguna = @p1 
-                                GROUP BY 
-                                    p.id_pengguna";
+                                    mp.id_pengguna = @p1";
 
                 SqlCommand command = new SqlCommand(query, _connection);
                 command.Parameters.AddWithValue("@p1", id);

@@ -107,23 +107,6 @@ namespace AstraLearnAPI.Model
             {
                 _connection.Close();
             }
-
-            try
-            {
-                string query = "UPDATE tb_pelatihan SET jumlah_peserta = jumlah_peserta + 1 WHERE id_pelatihan = @p1";
-                SqlCommand command = new SqlCommand(query, _connection);
-                command.Parameters.AddWithValue("@p1", data.id_pelatihan);
-                _connection.Open();
-                command.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                _connection.Close();
-            }
         }
 
         public void UpdateData(MengikutiPelatihanModel data)

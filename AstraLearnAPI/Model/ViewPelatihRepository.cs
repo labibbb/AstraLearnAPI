@@ -23,10 +23,10 @@ namespace AstraLearnAPI.Model
             {
                 string query = @"SELECT 
                                     p.id_pengguna,
-                                    COUNT(*) AS jumlah_pelatihan,
-                                    SUM(jumlah_peserta) AS jumlah_peserta,
-                                    SUM(CASE WHEN riwayat_section < jumlah_section THEN 1 ELSE 0 END) AS pelatihan_berjalan,
-                                    SUM(CASE WHEN riwayat_section = jumlah_section THEN 1 ELSE 0 END) AS pelatihan_selesai
+                                    (SELECT COUNT(*) FROM [AstraLearn].[dbo].[tb_pelatihan] WHERE id_pengguna = p.id_pengguna) AS jumlah_pelatihan,
+                                    COUNT(p.jumlah_peserta) AS jumlah_peserta,
+                                    SUM(CASE WHEN mengikuti.riwayat_section < p.jumlah_section THEN 1 ELSE 0 END) AS pelatihan_berjalan,
+                                    SUM(CASE WHEN mengikuti.riwayat_section = p.jumlah_section THEN 1 ELSE 0 END) AS pelatihan_selesai
                                 FROM 
                                     [AstraLearn].[dbo].[tb_pelatihan] p
                                 JOIN
