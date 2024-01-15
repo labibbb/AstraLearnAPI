@@ -22,18 +22,18 @@ namespace AstraLearnAPI.Model
             try
             {
                 string query = @"SELECT
-                                    tb_pengguna.nama_lengkap AS nama_pengguna,
-                                    tb_pelatihan.nama_pelatihan,
-                                    tb_mengikuti_pelatihan.riwayat_section,
-                                    CASE 
-                                        WHEN tb_mengikuti_pelatihan.riwayat_section = tb_pelatihan.jumlah_section + 1THEN 'Selesai'
-                                        ELSE 'Belum Selesai'
-                                    END AS status,
-                                    ((CAST(tb_mengikuti_pelatihan.riwayat_section AS FLOAT) / (tb_pelatihan.jumlah_section + 1)) * 100) AS presentase
+                                    tb_pengguna.nama_lengkap AS nama_pengguna, 
+	                                tb_pelatihan.nama_pelatihan, 
+	                                r.riwayat_section,
+	                                CASE 
+	                                WHEN r.riwayat_section >= tb_pelatihan.jumlah_section THEN 'Selesai'
+	                                ELSE 'Belum Selesai'
+                                END AS status,
+                                    (CONVERT(FLOAT, r.[displayed_riwayat_section]) / r.[jumlah_section]) * 100 AS presentase
                                 FROM
-                                    tb_mengikuti_pelatihan
-                                    JOIN tb_pengguna ON tb_mengikuti_pelatihan.id_pengguna = tb_pengguna.id_pengguna
-                                    JOIN tb_pelatihan ON tb_mengikuti_pelatihan.id_pelatihan = tb_pelatihan.id_pelatihan";
+                                    View_riwayat r
+                                JOIN tb_pengguna ON r.id_pengguna = tb_pengguna.id_pengguna
+                                JOIN tb_pelatihan ON r.id_pelatihan = tb_pelatihan.id_pelatihan";
 
                 SqlCommand command = new SqlCommand(query, _connection);
                 _connection.Open();

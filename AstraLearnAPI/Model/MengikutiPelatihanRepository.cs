@@ -88,16 +88,24 @@ namespace AstraLearnAPI.Model
         {
             try
             {
-                string query = "INSERT INTO tb_mengikuti_pelatihan (id_pengguna, id_pelatihan, riwayat_section, riwayat_nilai, rating) " +
-                               "VALUES (@p1, @p2, @p3, @p4, @p5)";
-                SqlCommand command = new SqlCommand(query, _connection);
-                command.Parameters.AddWithValue("@p1", data.id_pengguna);
-                command.Parameters.AddWithValue("@p2", data.id_pelatihan);
-                command.Parameters.AddWithValue("@p3", data.riwayat_section);
-                command.Parameters.AddWithValue("@p4", data.riwayat_nilai);
-                command.Parameters.AddWithValue("@p5", data.rating);
-                _connection.Open();
-                command.ExecuteNonQuery();
+                // Check if the data already exists
+                if (!IsDataExists(data))
+                {
+                    string query = "INSERT INTO tb_mengikuti_pelatihan (id_pengguna, id_pelatihan, riwayat_section, riwayat_nilai, rating) " +
+                                   "VALUES (@p1, @p2, @p3, @p4, @p5)";
+                    SqlCommand command = new SqlCommand(query, _connection);
+                    command.Parameters.AddWithValue("@p1", data.id_pengguna);
+                    command.Parameters.AddWithValue("@p2", data.id_pelatihan);
+                    command.Parameters.AddWithValue("@p3", data.riwayat_section);
+                    command.Parameters.AddWithValue("@p4", data.riwayat_nilai);
+                    command.Parameters.AddWithValue("@p5", data.rating);
+                    _connection.Open();
+                    command.ExecuteNonQuery();
+                }
+                else
+                {
+                    Console.WriteLine("Data already exists.");
+                }
             }
             catch (Exception ex)
             {
@@ -108,6 +116,21 @@ namespace AstraLearnAPI.Model
                 _connection.Close();
             }
         }
+
+        private bool IsDataExists(MengikutiPelatihanModel data)
+        {
+            string query = "SELECT COUNT(*) FROM tb_mengikuti_pelatihan WHERE id_pengguna = @p1 AND id_pelatihan = @p2";
+            SqlCommand command = new SqlCommand(query, _connection);
+            command.Parameters.AddWithValue("@p1", data.id_pengguna);
+            command.Parameters.AddWithValue("@p2", data.id_pelatihan);
+
+            _connection.Open();
+            int count = (int)command.ExecuteScalar();
+            _connection.Close();
+
+            return count > 0;
+        }
+
 
         public void UpdateData(MengikutiPelatihanModel data)
         {
